@@ -11,7 +11,7 @@ import Player from './assets/dude.png'
 class MyGame extends Phaser.Scene
 {
 
-
+    
 
     constructor ()
     {
@@ -75,7 +75,7 @@ class MyGame extends Phaser.Scene
         });
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+            frames: this.anims.generateFrameNumbers('player', { start: 5, end: 8 }),
             frameRate: 10,
             repeat: -1
         });
