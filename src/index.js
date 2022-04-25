@@ -5,11 +5,21 @@ import SpriteSheet from './assets/v_0.1.png'
 
 class AfterImage extends Phaser.Scene{
 
-    constructor(path){
+    constructor(game, path, player){
         super()
-        this.xCordinates = path.x;
-        this.yCordinates = path.y;
-        this.enemyAfterImage = this.add.sprite(100, 100, 'masterSprite', 0)
+        this.xCordinates = [...path.x];
+        this.yCordinates = [...path.y];
+        this.enemyAfterImage = game.add.sprite(100, 100, 'masterSprite', 0)
+    }
+
+    move(){
+        if(this.xCordinates.length == 0){
+            this.enemyAfterImage.destroy();
+            return false
+        }
+        this.enemyAfterImage.x = this.xCordinates.shift()
+        this.enemyAfterImage.y = this.yCordinates.shift()
+        return true
     }
 
 
@@ -18,11 +28,18 @@ class AfterImage extends Phaser.Scene{
 
 class MyGame extends Phaser.Scene
 {
-    
+    afterImageMovement(){
+        this.pastTravler.forEach((enemyAfterImage, index, object) =>{
+            if(!enemyAfterImage.move()){
+                this.pastTravler.splice(index, 1)
+            }
+
+        })
+    }
 
 
     createImage(){
-        this.enemy = new AfterImage(this, this.locations)
+        this.pastTravler.push(new AfterImage(this, this.locations, this.player))
         
     }
 
@@ -93,6 +110,7 @@ if (cursors.up.isDown && this.player.body.touching.down)
         this.locations.x.push(this.player.x)
         this.locations.y.push(this.player.y)
         this.movement()
+        this.afterImageMovement()
     
 }
 }
