@@ -1,10 +1,15 @@
 import Phaser from 'phaser';
 import SpriteSheet from './assets/v_0.1.png'
 
+
+
 class AfterImage extends Phaser.Scene{
 
-    constructor(gameState, path){
+    constructor(path){
         super()
+        this.xCordinates = path.x;
+        this.yCordinates = path.y;
+        this.enemyAfterImage = this.add.sprite(100, 100, 'masterSprite', 0)
     }
 
 
