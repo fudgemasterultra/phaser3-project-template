@@ -5,12 +5,16 @@ import SpriteSheet from './assets/v_0.1.png'
 
 class AfterImage extends Phaser.Scene{
 
-    constructor(game, path, player){
+    constructor(game, path){
         super()
         this.xCordinates = [...path.x];
         this.yCordinates = [...path.y];
-        this.enemyAfterImage = game.add.sprite(100, 100, 'masterSprite', 0)
+        this.enemyAfterImage = game.physics.add.sprite(100, 100, 'masterSprite', 0).setGravity(0,0).refreshBody()
+        game.physics.add.overlap(this.enemyAfterImage, game.player, () => {
+            console.log('overlapped')
+        })
     }
+    
 
     move(){
         if(this.xCordinates.length == 0){
@@ -39,7 +43,7 @@ class MyGame extends Phaser.Scene
 
 
     createImage(){
-        this.pastTravler.push(new AfterImage(this, this.locations, this.player))
+        this.pastTravler.push(new AfterImage(this, this.locations))
         
     }
 
@@ -102,6 +106,7 @@ if (cursors.up.isDown && this.player.body.touching.down)
         this.player.setCollideWorldBounds(true)
 
         this.physics.add.collider(this.player, this.platform)
+        
         
 
     }
