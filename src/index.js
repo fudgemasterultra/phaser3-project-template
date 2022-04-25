@@ -11,7 +11,7 @@ import Player from './assets/dude.png'
 class MyGame extends Phaser.Scene
 {
 
-    
+
 
     constructor ()
     {
@@ -32,7 +32,15 @@ class MyGame extends Phaser.Scene
       
      create ()
     {
-        
+        this.stars = this.physics.add.group({
+            key:'star',
+            repeat: 11,
+            setXY: {x:12, y:0 ,stepX: 70}
+        })
+        let stars = this.stars
+        stars.children.iterate(function (child){
+            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
+        })
         this.add.image(400,300, 'sky')
         this.platforms = this.physics.add.staticGroup();
         let platforms = this.platforms
@@ -48,6 +56,7 @@ class MyGame extends Phaser.Scene
         player.setCollideWorldBounds(true)
 
         this.physics.add.collider(player, platforms)
+        this.physics.add.collider(stars, platforms)
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('player', {
@@ -79,11 +88,18 @@ class MyGame extends Phaser.Scene
             frameRate: 10,
             repeat: -1
         });
-        
+        function collectStar (player, stars)
+        {
+            stars.disableBody(true, true);
+        }
+        this.physics.add.overlap(this.player, this.stars, collectStar, null, this)
+
+
     }
     
          update(){
-            let cursors = this.input.keyboard.createCursorKeys();
+            const cursors = this.input.keyboard.createCursorKeys();
+
             if (cursors.left.isDown)
 {
     this.player.setVelocityX(-160);
