@@ -9,8 +9,9 @@ class AfterImage extends Phaser.Scene{
         super()
         this.xCordinates = [...path.x];
         this.yCordinates = [...path.y];
-        this.enemyAfterImage = game.physics.add.sprite(100, 100, 'masterSprite', 0).setGravity(0,0).refreshBody()
-        game.physics.add.overlap(this.enemyAfterImage, game.player, () => {
+        this.enemyAfterImage = game.physics.add.sprite(100, 100, 'masterSprite', 0).setGravity(0,0)
+        Phaser.Physics.Matter.Components.Sensor.setSensor(true)
+        game.physics.add.collider(this.enemyAfterImage, game.platform, () => {
             console.log('overlapped')
         })
     }
@@ -105,7 +106,9 @@ if (cursors.up.isDown && this.player.body.touching.down)
         this.player = this.physics.add.sprite(100, 100, 'masterSprite', 0)
         this.player.setCollideWorldBounds(true)
 
-        this.physics.add.collider(this.player, this.platform)
+        this.physics.add.collider(this.player, this.platform, () => {
+            console.log('touching')
+        })
         
         
 
