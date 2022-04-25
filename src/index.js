@@ -1,20 +1,22 @@
-import Phaser from 'phaser';
+import Phaser, { Curves } from 'phaser';
 import SpriteSheet from './assets/v_0.1.png'
 
 class AfterImage extends Phaser.Scene{
 
     constructor(gameState, path){
         super()
+        const cordinatesX = path.x
+        const cordinatesY = path.y
+        let pathCreate = new Phaser.Curves.MoveTo(
+            new Phaser.Math.Vector2(cordinatesX, cordinatesY)
+        )
+        new Phaser.GameObjects.PathFollower(this,pathCreate,100, 100,'masterSprite', 0  )
         console.log(path)
-        this.enemy = gameState.physics.add.sprite(100, 100, 'masterSprite', 0).setGravity(0,0)
-        this.starting = 0
 
     }
     update(){
-        console.log('test')
         this.enemy.x = path.x[this.starting]
         this.enemy.y = path.y[this.starting]
-        this.starting += 1
     }
 
 }
@@ -82,10 +84,10 @@ if (cursors.up.isDown && this.player.body.touching.down)
         }
 
         this.platform.create(400, 590, 'masterSprite', 11).setScale(1).refreshBody()
-
+        
         this.player = this.physics.add.sprite(100, 100, 'masterSprite', 0)
         this.player.setCollideWorldBounds(true)
-
+        
         this.physics.add.collider(this.player, this.platform)
         
 
