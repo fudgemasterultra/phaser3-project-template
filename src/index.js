@@ -1,17 +1,58 @@
 import Phaser from 'phaser';
-import Sky from './assets/sky.png'
-import Star from './assets/star.png'
-import Platform from './assets/platform.png'
-import Bomb from './assets/bomb.png'
-import Player from './assets/dude.png'
+import SpriteSheet from './assets/v_0.1.png'
 
+class AfterImage extends Phaser.Scene{
 
+    constructor(gameState, path){
+        super()
+        console.log(path)
+        this.enemy = gameState.physics.add.sprite(100, 100, 'masterSprite', 0).setGravity(0,0)
+        this.starting = 0
+
+    }
+    update(){
+        console.log('test')
+        this.enemy.x = path.x[this.starting]
+        this.enemy.y = path.y[this.starting]
+        this.starting += 1
+    }
+
+}
 
 
 class MyGame extends Phaser.Scene
 {
 
 
+    createImage(){
+        new AfterImage(this, this.locations)
+        
+    }
+
+    movement(){
+        let cursors = this.input.keyboard.createCursorKeys();
+        if (cursors.left.isDown)
+{
+    this.player.setVelocityX(-160);
+
+}
+else if (cursors.right.isDown)
+{
+    this.player.setVelocityX(160);
+
+}
+else
+{
+    this.player.setVelocityX(0);
+
+}
+
+if (cursors.up.isDown && this.player.body.touching.down)
+{
+    this.player.setVelocityY(-330);
+    this.createImage()
+}
+    }
 
     constructor ()
     {
@@ -20,17 +61,40 @@ class MyGame extends Phaser.Scene
 
      preload ()
     {
-        
+        this.load.spritesheet('masterSprite',SpriteSheet, {
+            frameWidth: 16,
+            frameHeight: 16,
+        })
+
     }
       
      create ()
-    {
+    {      
 
+
+        this.locations = {
+            x: [],
+            y: []
+        }
+        this.platform = this.physics.add.staticGroup()
+        for(let i = 0; i < 816; i+= 16){
+            this.platform.create(i,590 , 'masterSprite', 11)
+        }
+
+        this.platform.create(400, 590, 'masterSprite', 11).setScale(1).refreshBody()
+
+        this.player = this.physics.add.sprite(100, 100, 'masterSprite', 0)
+        this.player.setCollideWorldBounds(true)
+
+        this.physics.add.collider(this.player, this.platform)
         
 
     }
     
-         update(){
+    update(){
+        this.locations.x.push(this.player.x)
+        this.locations.y.push(this.player.y)
+        this.movement()
     
 }
 }
